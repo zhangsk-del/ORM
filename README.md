@@ -17,7 +17,7 @@
 
 有了连接池以后，我们JDBC使用的流程其实没有太多变化,JDBC的流程写在DAO类中，而DAO类中通常的方法都是一些CURD，都是重复性的代码。比如增删改三个方法 都是对数据库的更新操作，三个方法非常像，不同的是条SQL语句 ，差SQL上的那些问号信息
 
-**封装ORM需要解决的问题**：解决DAO层代码**冗余**的问题，让操作数据库变得更简单
+**封装ORM需要解决的问题**：解决DAO层代码**冗余**的问题，让操作数据库变得更简单，**实现在dao层方法上顶一注解即可**
 
 ## **封装实现**：
 
@@ -30,10 +30,11 @@
 本项目是基于阿里巴巴的**druid**连接池进行封装的**ORM**，是在连接池上进一步的封装，为了加强自己的基础和能更深入解框架的本质， 自己实现了ORM框架的常用CRUD功能。本质是解决**DAO层代码冗余**的问题。
 
 ## 项目核心
+核心动态代理类：/src/main/java/com/zsk/orm/**Sqlsession**.java下的getMapper方法
 
 核心逻辑在该类：/src/main/java/com/zsk/orm/**Handler**.java 为核心处理类，该类下有方法的详细的说明，想深入理解的同学可以看该类下的源码哦
 
-## 使用ORM：
+## 使用ORM(与MyBatis使用类似)：
 
 ```JAVA
  1、导入依赖包
@@ -58,9 +59,31 @@
      initialSize=5
      maxActive=20
      maxWait=3000
-         
-   3、在类中 new SqlSesion对象，有了该对象将可以使用ORM啦
-      SqlSesion sqlSesion=new SqlSesion();
+  
+   3、在dao接口中写方法，在方法上写注解，注解内容为sql
+    @Update("update atm set apassword=#{apassword} where id=2")
+    void update(String apassword);
+
+    @Insert("insert into atm(apassword,balance) values(#{apassword},#{balance})")
+    void insert(Atm atm);
+
+    @Delete("delete from atm where id=#{id}")
+    void delete(Atm atm);
+
+    @Select("select * from atm where #{id}")
+    Atm select1(Atm atm);
+
+    @Select("select * from atm")
+    List<Atm> select2();
+
+    @Select("select * from atm where id=#{id}")
+    Atm select3(Map<String, String> map);
+
+    @Select("select * from atm where id=#{id}")
+    HashMap<String, String> select4(Map<String, String> map);
+   
+   4、在service中 new SqlSesion.getMapper(Dao接口.class)对象，有了该对象将可以使用ORM啦
+     Dao接口 = SqlSesion sqlSesion=new SqlSesion().getMapper(Dao接口.class);
       
 ```
 
