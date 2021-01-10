@@ -18,6 +18,7 @@
 有了连接池以后，我们JDBC使用的流程其实没有太多变化,JDBC的流程写在DAO类中，而DAO类中通常的方法都是一些CURD，都是重复性的代码。比如增删改三个方法 都是对数据库的更新操作，三个方法非常像，不同的是条SQL语句 ，差SQL上的那些问号信息
 
 **封装ORM需要解决的问题**：解决DAO层代码**冗余**的问题，让操作数据库变得更简单，**实现在dao层方法上顶一注解即可**
+
 ## ORM调用流程
 
 ![](https://img-blog.csdnimg.cn/20210110151316881.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3oxMjQ1Njc4NDU1NA==,size_16,color_FFFFFF,t_70#pic_center)
@@ -34,6 +35,7 @@
 本项目是基于阿里巴巴的**druid**连接池进行封装的**ORM**，是在连接池上进一步的封装，为了加强自己的基础和能更深入解框架的本质， 自己实现了ORM框架的常用CRUD功能。本质是解决**DAO层代码冗余**的问题。
 
 ## 项目核心
+
 核心动态代理类：/src/main/java/com/zsk/orm/**Sqlsession**.java下的getMapper方法
 
 核心逻辑在该类：/src/main/java/com/zsk/orm/**Handler**.java 为核心处理类，该类下有方法的详细的说明，想深入理解的同学可以看该类下的源码哦
@@ -94,9 +96,4 @@
 
 
 
-
-
 ​		
-
-
-
