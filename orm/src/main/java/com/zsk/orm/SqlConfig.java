@@ -18,42 +18,53 @@ public class SqlConfig {
     //设置一方法，进行增/删/改 操作
     //obj所携带的参数
     public static void serviceUpdate(String sql, Object obj) {
+        Connection conn = null;
+        PreparedStatement pstat = null;
         try {
             KeySql keySql = handler.analyzeSql(sql);
-            Connection conn = DruidUtil.getConnection();
-            PreparedStatement pstat = conn.prepareStatement(keySql.getSqlBuilder());
+            conn = DruidUtil.getConnection();
+            pstat = conn.prepareStatement(keySql.getSqlBuilder());
             if (obj != null) {
                 handler.houalPrepared(pstat, obj, keySql.getKeyList());
             }
             pstat.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            DruidUtil.close(conn, pstat, null);
         }
     }
 
     //单条查询语句
-    public static  <T> T serviceSelect(String sql, Object obj, Class resultType) {
+    public static <T> T serviceSelect(String sql, Object obj, Class resultType) {
         return (T) serviceSelectMore(sql, obj, resultType).get(0);
     }
 
     //多条语句
-    public static  <T> List<T> serviceSelectMore(String sql, Object obj, Class resultType) {
+    public static <T> List<T> serviceSelectMore(String sql, Object obj, Class resultType) {
         List<T> list = new ArrayList();
+        Connection conn = null;
+        PreparedStatement pstat = null;
+        ResultSet rs = null;
         try {
             KeySql keySql = handler.analyzeSql(sql);
-            Connection conn = DruidUtil.getConnection();
-            PreparedStatement pstat = conn.prepareStatement(keySql.getSqlBuilder());
+            conn = DruidUtil.getConnection();
+            pstat = conn.prepareStatement(keySql.getSqlBuilder());
             if (obj != null) {
                 handler.houalPrepared(pstat, obj, keySql.getKeyList());
             }
-            ResultSet rs = pstat.executeQuery();
+            rs = pstat.executeQuery();
             while (rs.next()) {
                 //设计一个方法 负责分析给定Class类型   确定返回值是什么类型
                 list.add((T) handler.handlerSelect(rs, resultType));
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            DruidUtil.close(conn, pstat, rs);
         }
         return list;
     }
+
+
 }
