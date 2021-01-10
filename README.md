@@ -23,6 +23,8 @@
 
 ![](https://img-blog.csdnimg.cn/20210110151316881.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3oxMjQ1Njc4NDU1NA==,size_16,color_FFFFFF,t_70#pic_center)
 
+地址：https://blog.csdn.net/z12456784554/article/details/112428527
+
 ## **封装实现**：
 
 1、Service正常写，里面需要一个dao作为属性，可以是一个真实类  可以是一个代理
